@@ -4,4 +4,4 @@ dist/
 dot-glomble.spec
 *.glomble
 __pycache__
-*/__pycache__
+src/__pycache__
