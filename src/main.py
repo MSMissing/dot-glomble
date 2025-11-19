@@ -31,7 +31,6 @@ def usage():
     print('  --version')
     print('    See the version of this app.')
 
-
 def main():
     if len(sys.argv) < 2:
         usage()
