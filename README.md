@@ -4,8 +4,15 @@ It makes your heart shine!
 
 ## syntax
 
-` dot-glomble create <FILENAME> <VIDEO_ID>`
+`dot-glomble create <FILENAME> <VIDEO_ID>`
 
-` dot-glomble detail <FILENAME>`
+Creates a new .glomble file.
 
-` dot-glomble play <FILENAME>`
+`dot-glomble detail <FILENAME>`
+
+Shows a detailed view ow the .glomble file using glomble.com.
+
+`dot-glomble play <FILENAME>`
+
+Plays the .glomble file using VLC.
+
