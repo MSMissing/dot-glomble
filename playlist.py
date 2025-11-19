@@ -31,7 +31,7 @@ class Playlist:
         return pl
 
     def __str__(self):
-        return f'Playlist : {",".join(self.videos or ["--EMPTY--"])}'
+        return f'Playlist : {", ".join(self.videos or ["--EMPTY--"])}'
 
 def usage():
     print('  playlist create <FILENAME>')

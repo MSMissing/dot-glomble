@@ -22,7 +22,7 @@ def usage():
     print('  from-name <QUERY> <FILENAME>')
     print('    Finds the video with the closest match to QUERY, and creates a .glomble file from it.')
     print('  search <QUERY> <FILENAME>')
-    print('    Searches for the query, and creates a playlist of up to 5 results')
+    print('    Searches for the query, and creates a playlist of results')
     print('  playlist <PLAYLIST-CMD>')
     print('    Playlist stuff')
     print('  --help or -h')
