@@ -2,7 +2,7 @@ import sys
 import os
 
 def version():
-    print('dot-glomble v1.0')
+    print('dot-glomble v1.1')
 
 def usage():
     print('Commands:')
@@ -28,8 +28,6 @@ def main():
                 raise SyntaxError('create command requires two arguments')
             if not sys.argv[2].endswith('.glomble'):
                 raise NameError('Filename must end with ".glomble"')
-            if len(sys.argv[3]) != 12:
-                raise TypeError(f'Invalid value {sys.argv[3]}')
 
             with open(sys.argv[2], 'x') as f:
                 f.write(sys.argv[3])
@@ -39,7 +37,7 @@ def main():
                 os.system(f'xdg-open https://glomble.com/videos/{f.read()}')
         case 'play':
             with open(sys.argv[2], 'r') as f:
-                os.system(f'vlc https://glomble.com/videos/{f.read()}/download')
+                os.system(f'cvlc https://glomble.com/videos/{f.read()}/download')
         case '--help' | '-h':
             version()
             print()
