@@ -13,12 +13,18 @@ def version():
 
 def usage():
     print('Commands:')
-    print('  create [FILE] [VALUE]')
+    print('  create <FILE> <VIDEO-ID>')
     print('    Creates a new .glomble file')
-    print('  detail [FILE]')
+    print('  detail <FILE>')
     print('    Opens a detailed view of the video with your default browser.')
-    print('  play [FILE]')
+    print('  play <FILE>')
     print('    Plays the file using VLC.')
+    print('  from-name <QUERY> <FILENAME>')
+    print('    Finds the video with the closest match to QUERY, and creates a .glomble file from it.')
+    print('  search <QUERY> <FILENAME>')
+    print('    Searches for the query, and creates a playlist of up to 5 results')
+    print('  playlist <PLAYLIST-CMD>')
+    print('    Playlist stuff')
     print('  --help or -h')
     print('    See this useful thingy')
     print('  --version')
@@ -119,16 +125,19 @@ def main():
             create_file(args[1], get_id(url))
 
         case 'search':
+            if len(args) < 2:
+                raise SyntaxError('Not enough arguments')
             print(f'Searching glomble for {args[0]}')
             urls = search.search(args[0])
             print('found videos:')
 
-            os.mkdir('results')
-            i = 0
-            for url in urls[0:5]:
+            pl = playlist.Playlist()
+            for url in urls:
                 print(f' {get_id(url)}')
-                create_file(f'results/result{i}.glomble', get_id(url))
-                i += 1
+                pl.videos.append(get_id(url))
+
+            pl.save_file(args[1])
+
 
 
         case _:

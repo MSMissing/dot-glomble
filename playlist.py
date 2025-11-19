@@ -1,5 +1,6 @@
 import sys
 import re
+import itertools
 
 class Playlist:
     def __init__(self, videos=[]):
@@ -30,11 +31,17 @@ class Playlist:
         return pl
 
     def __str__(self):
-        return f'Playlist - Videos: {", ".join(self.videos)}'
+        return f'Playlist : {",".join(self.videos or ["--EMPTY--"])}'
 
 def usage():
-    print('  playlist create')
-    print('    Creates a playlist')
+    print('  playlist create <FILENAME>')
+    print('    Creates an empty playlist')
+    print('  playlist add <FILENAME> <...VIDEOS>')
+    print('    Adds videos to a playlist')
+    print('  playlist remove/rm <FILENAME> <...VIDEOS>')
+    print('    Removes videos from a playlist')
+    print('  playlist view <FILENAME>')
+    print('     Shows a simple view of the contents of a playlist.')
 
 def playlist_command():
     args = sys.argv[2:]
@@ -86,5 +93,8 @@ def playlist_command():
             print('Removed video(s) from playlist')
             print(pl)
             pl.save_file(args[1])
+        case 'view':
+            pl = Playlist.from_file(args[1])
+            print(pl)
 
 
