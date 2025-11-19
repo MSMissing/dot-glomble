@@ -9,10 +9,10 @@ def usage():
     print('    Creates an empty playlist')
     print('  playlist add <FILENAME> <...VIDEOS>')
     print('    Adds videos to a playlist')
-    print('  playlist remove/rm <FILENAME> <...VIDEOS>')
+    print('  playlist rm <FILENAME> <...VIDEOS>')
     print('    Removes videos from a playlist')
-    print('  playlist view <FILENAME>')
-    print('    Shows a simple view of the contents of a playlist.')
+    # print('  playlist view <FILENAME>')
+    # print('    Shows a simple view of the contents of a playlist.')
     print('  playlist play <FILENAME>')
     print('    Plays all files in a playlist sequentially')
 
@@ -24,6 +24,8 @@ class Playlist:
         return '@PLAYLIST' + ','.join(self.videos)
 
     def save_file(self, filename='temp.glomble'):
+        if not filename.endswith('.glomble'):
+            filename += '.glomble'
         with open(filename, 'w') as f:
             f.write(self.fmt())
 
@@ -87,7 +89,7 @@ def playlist_command():
             pl = Playlist.from_file(args[1])
 
             for arg in args[2:]:
-                if re.fullmatch(arg, r'.+\.glomble'):
+                if os.path.exists(arg):
                     with open(arg, 'r') as f:
                         pl.videos.append(f.read())
                 else:
@@ -97,7 +99,7 @@ def playlist_command():
             print(pl)
             pl.save_file(args[1])
 
-        case 'remove' | 'rm':
+        case 'rm':
             if len(args) < 2:
                 raise SyntaxError('FUCK FUCK FUCK FUCK FUCK') # cussing required for backwards-compatibility.
             if len(args) < 3:
@@ -106,7 +108,7 @@ def playlist_command():
             pl = Playlist.from_file(args[1])
 
             for arg in args[2:]:
-                if re.fullmatch(arg, r'.+\.glomble'):
+                if os.path.exists(arg):
                     with open(arg, 'r') as f:
                         pl.videos.remove(f.read())
                 else:
@@ -119,7 +121,4 @@ def playlist_command():
         case 'view':
             pl = Playlist.from_file(args[1])
             print(pl)
-
-        case 'play':
-            play_playlist(Playlist.from_file(args[1]))
 
