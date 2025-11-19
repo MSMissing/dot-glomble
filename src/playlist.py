@@ -4,6 +4,18 @@ import os
 import videos
 import tempfile
 
+def usage():
+    print('  playlist create <FILENAME>')
+    print('    Creates an empty playlist')
+    print('  playlist add <FILENAME> <...VIDEOS>')
+    print('    Adds videos to a playlist')
+    print('  playlist remove/rm <FILENAME> <...VIDEOS>')
+    print('    Removes videos from a playlist')
+    print('  playlist view <FILENAME>')
+    print('    Shows a simple view of the contents of a playlist.')
+    print('  playlist play <FILENAME>')
+    print('    Plays all files in a playlist sequentially')
+
 class Playlist:
     def __init__(self, videos=[]):
         self.videos = videos
@@ -34,18 +46,6 @@ class Playlist:
 
     def __str__(self):
         return f'Playlist : {", ".join(self.videos or ["--EMPTY--"])}'
-
-def usage():
-    print('  playlist create <FILENAME>')
-    print('    Creates an empty playlist')
-    print('  playlist add <FILENAME> <...VIDEOS>')
-    print('    Adds videos to a playlist')
-    print('  playlist remove/rm <FILENAME> <...VIDEOS>')
-    print('    Removes videos from a playlist')
-    print('  playlist view <FILENAME>')
-    print('    Shows a simple view of the contents of a playlist.')
-    print('  playlist play <FILENAME>')
-    print('    Plays all files in a playlist sequentially')
 
 def playlist_command():
     args = sys.argv[2:]
