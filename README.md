@@ -2,6 +2,10 @@
 
 A dedicated tool to save your favorite Glomble videos.
 
+## installation
+
+i dunno man figure it out yourself.
+
 ## syntax
 
 `dot-glomble create <FILENAME> <VIDEO_ID>`
@@ -15,4 +19,11 @@ Shows a detailed view ow the .glomble file using glomble.com.
 `dot-glomble play <FILENAME>`
 
 Plays the .glomble file using VLC.
+
+`dot-glomble download <FILENAME>`
+
+Downloads the mp4/mov file from media.glomble.com
+
+
+
 
