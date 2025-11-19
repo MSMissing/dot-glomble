@@ -39,18 +39,16 @@ def get_video_file(_id: str) -> bytes:
         media_response = media_conn.getresponse()
         print()
         print(media_response.status, media_response.reason)
-        print(media_response.headers)
-        print()
-        print(media_response.length)
-
         return (media_response.read(), media_response.getheader('Content-Type'))
     else:
-        raise ConnectionError(f'Expected response status of 302, but got {redirect_response.status}')
+        raise ConnectionError(f'Expected response status of 302 Found, but got {redirect_response.status} {redirect_response.reason}')
 
 def get_file_ext(text):
     match text:
         case 'video/mp4':
             return '.mp4'
+        case 'video/quicktime':
+            return '.mov'
         case _:
             raise NotImplemented()
 
@@ -87,7 +85,7 @@ def main():
             with open(sys.argv[2], 'r') as f:
                 video_id = f.read()
                 (media, media_type) = get_video_file(video_id)
-            with open(sys.argv[2].split('.')[0] + get_file_ext(media_type), 'wb') as f:
+            with open('.'.join(sys.argv[2].split('.')[0:-1]) + get_file_ext(media_type), 'wb') as f:
                 print(f'writing to file {f.name}')
                 f.write(media)
 

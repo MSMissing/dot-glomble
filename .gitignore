@@ -2,3 +2,4 @@ out.glomble
 build/
 dist/
 dot-glomble.spec
+*.glomble
