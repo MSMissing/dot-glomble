@@ -46,10 +46,6 @@ Adds videos to a playlist.
 
 Removes videos from a playlist.
 
-`dot-glomble playlist view <FILE>`
-
-Shows a preview of the playlist. This only uses the video IDs so it's not exactly useful...
-
 `dot-glomble playlist play <FILE>`
 
 Plays a playlist using VLC.
