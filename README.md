@@ -1,6 +1,6 @@
 # dot-glomble
 
-A dedicated tool to save your favorite Glomble videos.
+A dedicated tool to save your favorite Glomble videos. I am not liable if this becomes outdated, especially the search function.
 
 ## installation
 

@@ -3,6 +3,7 @@ import os
 import http.client as client
 import urllib.request
 import playlist
+import search
 
 def verbose(*args):
     print(*args)
@@ -23,13 +24,20 @@ def usage():
     print('  --version')
     print('    See the version of this app.')
 
-def get_video_file(_id: str) -> bytes:
+def get_id(url):
+    return url.replace('https://glomble.com/videos/', '')
+
+def get_video_url(_id: str) -> str:
     glom = client.HTTPSConnection('glomble.com')
     print(f'requesting file at https://glomble.com/videos/{_id}/download...')
     glom.request('GET', f'/videos/{_id}/download')
     redirect_response = glom.getresponse()
     glom.close()
     print(redirect_response.status, redirect_response.reason)
+    return redirect_response
+
+def get_video_file(_id: str) -> bytes:
+    redirect_response = get_video_url(_id)
     if redirect_response.status == 302:
         print()
         loc = redirect_response.getheader('Location')
@@ -53,24 +61,23 @@ def get_file_ext(text):
         case _:
             raise NotImplemented()
 
-def create_file():
-    if len(sys.argv) < 4:
-        raise SyntaxError('create command requires two arguments')
-    if not sys.argv[2].endswith('.glomble'):
+def create_file(filename, video_id):
+    if not filename.endswith('.glomble'):
         raise NameError('Filename must end with ".glomble"')
 
-    with open(sys.argv[2], 'x') as f:
-        f.write(sys.argv[3])
-    print(f'Successfully created {sys.argv[2]}')
+    with open(filename, 'x') as f:
+        f.write(video_id)
+    print(f'Successfully created file {filename}.')
 
 def main():
     if len(sys.argv) < 2:
         usage()
         return
 
+    args = sys.argv[2:]
     match sys.argv[1]:
         case 'create':
-            create_file()
+            create_file(args[0], args[1])
 
         case 'detail':
             with open(sys.argv[2], 'r') as f:
@@ -99,17 +106,38 @@ def main():
                 f.write(media)
 
         case 'playlist':
-            playlist.playlist_command()
+            try:
+                playlist.playlist_command()
+            except SyntaxError as err:
+                playlist.usage()
+                raise err
+
+        case 'from-name':
+            print(f'Searching glomble for {args[0]}')
+            url = search.search(args[0])[0]
+            print(f'Found video {get_id(url)}.')
+            create_file(args[1], get_id(url))
+
+        case 'search':
+            print(f'Searching glomble for {args[0]}')
+            urls = search.search(args[0])
+            print('found videos:')
+
+            os.mkdir('results')
+            i = 0
+            for url in urls[0:5]:
+                print(f' {get_id(url)}')
+                create_file(f'results/result{i}.glomble', get_id(url))
+                i += 1
+
 
         case _:
-            raise SyntaxError('Invalid syntax.')
+            raise SyntaxError(f'Invalid command {sys.argv[1]}.')
 
 
 if __name__ == "__main__":
     try:
         main()
     except SyntaxError as err:
-        print(err)
         usage()
-    except Exception as err:
-        print(err)
+        raise err
