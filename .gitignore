@@ -3,3 +3,4 @@ build/
 dist/
 dot-glomble.spec
 *.glomble
+__pycache__
