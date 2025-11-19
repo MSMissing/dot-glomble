@@ -2,6 +2,7 @@ import sys
 import os
 import http.client as client
 import urllib.request
+import playlist
 
 def verbose(*args):
     print(*args)
@@ -52,6 +53,16 @@ def get_file_ext(text):
         case _:
             raise NotImplemented()
 
+def create_file():
+    if len(sys.argv) < 4:
+        raise SyntaxError('create command requires two arguments')
+    if not sys.argv[2].endswith('.glomble'):
+        raise NameError('Filename must end with ".glomble"')
+
+    with open(sys.argv[2], 'x') as f:
+        f.write(sys.argv[3])
+    print(f'Successfully created {sys.argv[2]}')
+
 def main():
     if len(sys.argv) < 2:
         usage()
@@ -59,26 +70,24 @@ def main():
 
     match sys.argv[1]:
         case 'create':
-            if len(sys.argv) < 4:
-                raise SyntaxError('create command requires two arguments')
-            if not sys.argv[2].endswith('.glomble'):
-                raise NameError('Filename must end with ".glomble"')
+            create_file()
 
-            with open(sys.argv[2], 'x') as f:
-                f.write(sys.argv[3])
-            print(f'Successfully created {sys.argv[2]}')
         case 'detail':
             with open(sys.argv[2], 'r') as f:
                 os.system(f'xdg-open https://glomble.com/videos/{f.read()}')
+
         case 'play':
             with open(sys.argv[2], 'r') as f:
                 os.system(f'cvlc https://glomble.com/videos/{f.read()}/download')
+
         case '--help' | '-h':
             version()
             print()
             usage()
+
         case 'version' | '--version':
             version()
+
         case 'download':
             if len(sys.argv) != 3:
                 raise SyntaxError('Too many arguments.')
@@ -88,6 +97,9 @@ def main():
             with open('.'.join(sys.argv[2].split('.')[0:-1]) + get_file_ext(media_type), 'wb') as f:
                 print(f'writing to file {f.name}')
                 f.write(media)
+
+        case 'playlist':
+            playlist.playlist_command()
 
         case _:
             raise SyntaxError('Invalid syntax.')
