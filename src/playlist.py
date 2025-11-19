@@ -47,6 +47,24 @@ class Playlist:
     def __str__(self):
         return f'Playlist : {", ".join(self.videos or ["--EMPTY--"])}'
 
+def play_playlist(playlist: Playlist) -> None:
+    cmd = 'vlc '
+    urls = []
+    for video in playlist.videos:
+        urls.append(f'https://glomble.com/videos/{video}/download')
+
+    f = tempfile.NamedTemporaryFile('w+t', suffix='.m3u')
+
+    for url in urls:
+        f.write(url)
+        f.write('\n')
+    cmd += f.name
+    f.read()
+
+    os.system(cmd)
+
+    f.close()
+
 def playlist_command():
     args = sys.argv[2:]
     if len(args) == 0:
@@ -103,22 +121,5 @@ def playlist_command():
             print(pl)
 
         case 'play':
-            pl = Playlist.from_file(args[1])
-            cmd = 'vlc '
-            urls = []
-            for video in pl.videos:
-                urls.append(videos.get_video_url(video))
-
-            f = tempfile.NamedTemporaryFile('w+t', suffix='.m3u')
-
-            for url in urls:
-                f.write(url)
-                f.write('\n')
-            cmd += f.name
-            f.read()
-
-            print(cmd)
-            os.system(cmd)
-
-            f.close()
+            play_playlist(Playlist.from_file(args[1]))
 

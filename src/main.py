@@ -98,7 +98,16 @@ def main():
 
 
         case _:
-            raise SyntaxError(f'Invalid command {sys.argv[1]}.')
+            if os.path.exists(sys.argv[1]):
+                with open(sys.argv[1], 'r') as f:
+                    content = f.read()
+                if content.startswith('@PLAYLIST'):
+                    playlist.play_playlist(playlist.Playlist.from_file(sys.argv[1]))
+                else:
+                    with open(sys.argv[1], 'r') as f:
+                        os.system(f'vlc https://glomble.com/videos/{f.read()}/download')
+            else:
+                raise SyntaxError(f'Invalid command {sys.argv[1]}.')
 
 
 if __name__ == "__main__":
