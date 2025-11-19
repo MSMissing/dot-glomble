@@ -1,1 +1,1 @@
-pyinstaller -F ./main.py -n dot-glomble
+pyinstaller -F ./src/main.py -n dot-glomble

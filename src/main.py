@@ -48,7 +48,7 @@ def main():
 
         case 'play':
             with open(sys.argv[2], 'r') as f:
-                os.system(f'cvlc https://glomble.com/videos/{f.read()}/download')
+                os.system(f'vlc https://glomble.com/videos/{f.read()}/download')
 
         case '--help' | '-h':
             version()

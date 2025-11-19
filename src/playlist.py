@@ -104,7 +104,7 @@ def playlist_command():
 
         case 'play':
             pl = Playlist.from_file(args[1])
-            cmd = 'cvlc '
+            cmd = 'vlc '
             urls = []
             for video in pl.videos:
                 urls.append(videos.get_video_url(video))
