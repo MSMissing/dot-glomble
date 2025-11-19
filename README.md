@@ -1,6 +1,6 @@
 # dot-glomble
 
-It makes your heart shine!
+A dedicated tool to save your favorite Glomble videos.
 
 ## syntax
 

@@ -1,5 +1,10 @@
 import sys
 import os
+import http.client as client
+import urllib.request
+
+def verbose(*args):
+    print(*args)
 
 def version():
     print('dot-glomble v1.1')
@@ -17,11 +22,43 @@ def usage():
     print('  --verision')
     print('    See the version of this app.')
 
-def read(file):
-    file.name
-    return file.read()
+def get_video_file(_id: str) -> bytes:
+    glom = client.HTTPSConnection('glomble.com')
+    print(f'requesting file at https://glomble.com/videos/{_id}/download...')
+    glom.request('GET', f'/videos/{_id}/download')
+    redirect_response = glom.getresponse()
+    glom.close()
+    print(redirect_response.status, redirect_response.reason)
+    if redirect_response.status == 302:
+        print()
+        loc = redirect_response.getheader('Location')
+        print(f'redirecting to {loc}...')
+
+        media_conn = client.HTTPSConnection('media.glomble.com')
+        media_conn.request('GET', loc)
+        media_response = media_conn.getresponse()
+        print()
+        print(media_response.status, media_response.reason)
+        print(media_response.headers)
+        print()
+        print(media_response.length)
+
+        return (media_response.read(), media_response.getheader('Content-Type'))
+    else:
+        raise ConnectionError(f'Expected response status of 302, but got {redirect_response.status}')
+
+def get_file_ext(text):
+    match text:
+        case 'video/mp4':
+            return '.mp4'
+        case _:
+            raise NotImplemented()
 
 def main():
+    if len(sys.argv) < 2:
+        usage()
+        return
+
     match sys.argv[1]:
         case 'create':
             if len(sys.argv) < 4:
@@ -44,6 +81,16 @@ def main():
             usage()
         case 'version' | '--version':
             version()
+        case 'download':
+            if len(sys.argv) != 3:
+                raise SyntaxError('Too many arguments.')
+            with open(sys.argv[2], 'r') as f:
+                video_id = f.read()
+                (media, media_type) = get_video_file(video_id)
+            with open(sys.argv[2].split('.')[0] + get_file_ext(media_type), 'wb') as f:
+                print(f'writing to file {f.name}')
+                f.write(media)
+
         case _:
             raise SyntaxError('Invalid syntax.')
 
