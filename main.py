@@ -19,7 +19,7 @@ def usage():
     print('    Plays the file using VLC.')
     print('  --help or -h')
     print('    See this useful thingy')
-    print('  --verision')
+    print('  --version')
     print('    See the version of this app.')
 
 def get_video_file(_id: str) -> bytes:
